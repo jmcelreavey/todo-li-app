@@ -1,11 +1,11 @@
-import { Text, AppShell, Burger, Flex, Button , Stack} from "@mantine/core";
-import { type LoaderFunctionArgs } from "@remix-run/node";
-import { NavLink, Outlet, useLocation , Form} from "@remix-run/react";
+import { AppShell, Burger, Button, Flex, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { type LoaderFunctionArgs } from "@remix-run/node";
+import { Form, NavLink, Outlet, useLocation } from "@remix-run/react";
 
-import { authenticator } from "../lib/auth.server";
-import { TodosIcon, BookmarkIcon, LogoutIcon } from "../components/icons";
 import { CommonErrorBoundary } from "../components/error-boundary";
+import { BookmarkIcon, LogoutIcon, TodosIcon } from "../components/icons";
+import { authenticator } from "../lib/auth.server";
 
 export default function Todos() {
   const [opened, { toggle }] = useDisclosure();
@@ -23,7 +23,7 @@ export default function Todos() {
       <AppShell.Header px="sm">
         <Flex align="center" h="100%" gap="sm">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Text size="lg">Todoアプリ</Text>
+          <Text size="lg">Todo App</Text>
         </Flex>
       </AppShell.Header>
 
@@ -31,8 +31,8 @@ export default function Todos() {
         <Stack h="100%" justify="space-between">
           <NavLinks />
 
-          {/* _main.tsxはルート扱いになり、actionを定義できない。 */}
-          {/* そのため、_main.logout.tsxにログアウトのアクションを定義し、そのアクションを呼び出す。 */}
+          {/* _main.tsx is treated as a route and cannot define actions. */}
+          {/* Therefore, define the logout action in _main.logout.tsx and call that action. */}
           <Form method="post" action="logout">
             <Button
               type="submit"
@@ -42,7 +42,7 @@ export default function Todos() {
               fullWidth
               leftSection={<LogoutIcon />}
             >
-              ログアウト
+              Logout
             </Button>
           </Form>
         </Stack>
@@ -61,7 +61,7 @@ function NavLinks() {
 
   const links = [
     {
-      label: "todo一覧",
+      label: "Todo List",
       to: "todos/incomplete",
       active: [
         "/todos/incomplete",
@@ -71,7 +71,7 @@ function NavLinks() {
       icon: <TodosIcon />,
     },
     {
-      label: "ブックマーク済み",
+      label: "Bookmarked",
       to: "bookmarks",
       active: currentPath === "/bookmarks",
       icon: <BookmarkIcon />,

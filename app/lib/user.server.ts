@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 import z from "zod";
-
 import { prisma } from "./db.server";
 import { ERROR_MESSAGES } from "../utils";
 
@@ -10,15 +9,17 @@ const SALT_ROUNDS = 10;
 export const CreateUserSchema = z.object({
   name: z
     .string()
-    .min(4, { message: "4文字以上で入力してください。" })
-    .max(20, { message: "20文字以下で入力してください。" })
-    .regex(/^[a-zA-Z0-9]+$/, { message: "半角英数で入力してください。" }),
+    .min(4, { message: "Please enter at least 4 characters." })
+    .max(20, { message: "Please enter at most 20 characters." })
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: "Please enter alphanumeric characters only.",
+    }),
   password: z
     .string()
-    .min(8, { message: "8文字以上で入力してください。" })
-    .max(20, { message: "20文字以下で入力してください。" })
+    .min(8, { message: "Please enter at least 8 characters." })
+    .max(20, { message: "Please enter at most 20 characters." })
     .regex(/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]*$/, {
-      message: "半角英数記号で入力してください。",
+      message: "Please enter alphanumeric and symbol characters only.",
     }),
 });
 
@@ -41,7 +42,7 @@ export async function createUser({
       error.code === "P2002"
     ) {
       return {
-        error: "既に使用されているユーザー名です。",
+        error: "The username is already taken.",
       };
     }
     console.error(error);

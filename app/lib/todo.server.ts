@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { prisma } from "./db.server";
 import { ERROR_MESSAGES } from "../utils";
 
@@ -49,8 +48,10 @@ export async function getTodo({ id }: { id: number }) {
 export const CreateTodoSchema = z.object({
   title: z
     .string()
-    .min(1, { message: "タイトルは必須です。" })
-    .max(20, { message: "タイトルは20文字以下で入力してください。" }),
+    .min(1, { message: "Title is required." })
+    .max(20, {
+      message: "Title should be less than or equal to 20 characters.",
+    }),
 });
 
 export async function createTodo({
@@ -73,8 +74,10 @@ export async function createTodo({
 export const UpdateTodoSchema = z.object({
   title: z
     .string()
-    .min(1, { message: "タイトルは必須です。" })
-    .max(20, { message: "タイトルは20文字以下で入力してください。" }),
+    .min(1, { message: "Title is required." })
+    .max(20, {
+      message: "Title should be less than or equal to 20 characters.",
+    }),
   progress: z.enum(["incomplete", "inprogress", "complete"]),
 });
 

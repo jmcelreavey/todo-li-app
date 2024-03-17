@@ -1,23 +1,23 @@
-import { useEffect } from "react";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
-import { AuthorizationError } from "remix-auth";
 import {
-  Text,
-  Stack,
-  Fieldset,
-  TextInput,
-  Button,
   Anchor,
+  Button,
+  Fieldset,
+  Stack,
+  Text,
+  TextInput,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { useEffect } from "react";
+import { AuthorizationError } from "remix-auth";
 
 import {
   AUTH_STRATEGY_NAME,
   AuthSchema,
   authenticator,
 } from "../lib/auth.server";
-import { commonActionData , ERROR_MESSAGES} from "../utils";
+import { ERROR_MESSAGES, commonActionData } from "../utils";
 
 export default function SignIn() {
   const actionData = useActionData<typeof action>();
@@ -38,7 +38,7 @@ export default function SignIn() {
 
   return (
     <>
-      <Text ta="center">ログイン</Text>
+      <Text ta="center">Sign In</Text>
       <Form method="post">
         <Stack
           renderRoot={(props) => (
@@ -48,27 +48,27 @@ export default function SignIn() {
         >
           <TextInput
             name="name"
-            label="ユーザー名"
-            placeholder="半角英数4~20文字で入力してください。"
+            label="Username"
+            placeholder="Enter a username with 4-20 alphanumeric characters."
             withAsterisk
             error={validationErrors?.name && validationErrors.name[0]}
           />
           <TextInput
             name="password"
             type="password"
-            label="パスワード"
-            placeholder="半角英数記号8~20文字で入力してください。"
+            label="Password"
+            placeholder="Enter a password with 8-20 alphanumeric characters and symbols."
             withAsterisk
             error={validationErrors?.password && validationErrors.password[0]}
           />
           <Button type="submit" fullWidth>
-            ログイン
+            Sign In
           </Button>
           <Anchor
             ta="center"
             renderRoot={(props) => <NavLink to="/auth/sign-up" {...props} />}
           >
-            新規登録はこちら
+            Sign Up Here
           </Anchor>
         </Stack>
       </Form>
@@ -83,8 +83,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  // requestはバリデーションと認証の両方で使用する。
-  // その際、request.formData() を複数回呼び出すとエラーになるので、cloneすることで回避する。
+  // The request is used for both validation and authentication.
+  // Calling request.formData() multiple times will result in an error, so we clone it to avoid that.
   const cloneRequest = request.clone();
   const formDataObj = Object.fromEntries(await cloneRequest.formData());
 
@@ -102,8 +102,8 @@ export async function action({ request }: ActionFunctionArgs) {
       throwOnError: true,
     });
   } catch (error) {
-    // 認証が成功時にはResponseのインスタンスがerrorとして返ってきて、catch文に入る。
-    // その場合はerrorを返すことで、redirect(successRedirect)処理が行われる。
+    // If authentication is successful, an instance of Response is returned as the error and caught in the catch block.
+    // In that case, returning the error will trigger the redirect to successRedirect.
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {
       return json({

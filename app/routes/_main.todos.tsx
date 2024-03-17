@@ -13,7 +13,7 @@ export default function Todos() {
   return (
     <Stack gap="xs">
       <Flex align="center" gap="sm">
-        <Text>Todo一覧</Text>
+        <Text>Todo List</Text>
         <ActionIcon
           variant="light"
           renderRoot={(props) => (
@@ -26,12 +26,12 @@ export default function Todos() {
 
       <Tabs
         value={location.pathname}
-        onChange={(newProgress) => navigate(newProgress || "/todos/incomplete")}
+        onChange={(newPath) => navigate(newPath || "/todos/incomplete")}
       >
         <Tabs.List>
-          <Tabs.Tab value="/todos/incomplete">未了</Tabs.Tab>
-          <Tabs.Tab value="/todos/inprogress">着手</Tabs.Tab>
-          <Tabs.Tab value="/todos/complete">完了</Tabs.Tab>
+          <Tabs.Tab value="/todos/incomplete">Incomplete</Tabs.Tab>
+          <Tabs.Tab value="/todos/inprogress">In Progress</Tabs.Tab>
+          <Tabs.Tab value="/todos/complete">Complete</Tabs.Tab>
         </Tabs.List>
       </Tabs>
 

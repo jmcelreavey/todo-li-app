@@ -1,14 +1,14 @@
-import { Outlet } from "@remix-run/react";
-import { LoaderFunctionArgs } from "@remix-run/node";
 import { Stack, Text } from "@mantine/core";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 
-import { authenticator } from "../lib/auth.server";
 import { CommonErrorBoundary } from "../components/error-boundary";
+import { authenticator } from "../lib/auth.server";
 
 export default function Bookmarks() {
   return (
     <Stack gap="xs">
-      <Text>ブックマーク済み</Text>
+      <Text>Bookmarked</Text>
       <Outlet />
     </Stack>
   );

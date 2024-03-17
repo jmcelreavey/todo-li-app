@@ -1,7 +1,16 @@
 import {
-  type ActionFunctionArgs,
+  ActionIcon,
+  Button,
+  Modal,
+  Stack,
+  Table,
+  TableTbody,
+  Text,
+} from "@mantine/core";
+import {
   json,
   redirect,
+  type ActionFunctionArgs,
   type LoaderFunctionArgs,
   type SerializeFrom,
 } from "@remix-run/node";
@@ -15,35 +24,26 @@ import {
   useParams,
   useSearchParams,
 } from "@remix-run/react";
-import {
-  Text,
-  Table,
-  ActionIcon,
-  TableTbody,
-  Modal,
-  Button,
-  Stack,
-} from "@mantine/core";
 import invariant from "tiny-invariant";
 
-import { authenticator } from "../lib/auth.server";
-import { EditIcon, DeleteIcon } from "../components/icons";
-import { TodoProgressBadge } from "../components/todos";
-import { CenterLoader } from "../components/loader";
 import { BookmarkButton } from "../components/button";
-import {
-  changeTodoBookmark,
-  deleteTodo,
-  getTodosByProgress,
-} from "../lib/todo.server";
-import { ERROR_MESSAGES } from "../utils";
+import { CommonErrorBoundary } from "../components/error-boundary";
+import { DeleteIcon, EditIcon } from "../components/icons";
+import { CenterLoader } from "../components/loader";
+import { TodoProgressBadge } from "../components/todos";
+import { authenticator } from "../lib/auth.server";
 import {
   SUCCESS_MESSAGE_KEY,
   commitSession,
   getSession,
 } from "../lib/session.server";
+import {
+  changeTodoBookmark,
+  deleteTodo,
+  getTodosByProgress,
+} from "../lib/todo.server";
 import { type UnwrapArray } from "../type";
-import { CommonErrorBoundary } from "../components/error-boundary";
+import { ERROR_MESSAGES } from "../utils";
 
 export default function TodosByProgress() {
   const { todos } = useLoaderData<typeof loader>();
@@ -61,7 +61,7 @@ export default function TodosByProgress() {
     return (
       <>
         <Text my="sm" size="sm" ta="center">
-          該当するTODOはありません。
+          No matching TODOs found.
         </Text>
         <Outlet />
       </>
@@ -110,7 +110,7 @@ function TableRow({ todo }: TableRowProps) {
         </ActionIcon>
       </Table.Td>
       <Table.Td w="3rem">
-        {/* クエリパラメータを使用し、モーダル開閉を制御する */}
+        {/* Use query parameters to control modal open/close */}
         <Form replace>
           <ActionIcon
             type="submit"
@@ -141,14 +141,14 @@ function DeleteConfirmModal() {
     <Modal
       opened={!!searchParams.get("deletedId")}
       onClose={() => navigate(`/todos/${progress}`, { replace: true })}
-      title="削除確認"
+      title="Delete Confirmation"
     >
       <Stack
         renderRoot={(props) => <Form method="post" replace {...props} />}
         gap="sm"
       >
         <Text>
-          {searchParams.get("deletedTitle")}を削除します。よろしいですか？
+          Are you sure you want to delete {searchParams.get("deletedTitle")}?
         </Text>
         <Button
           type="submit"
@@ -158,7 +158,7 @@ function DeleteConfirmModal() {
           color="red"
           disabled={submitting}
         >
-          削除
+          Delete
         </Button>
       </Stack>
     </Modal>
@@ -195,7 +195,7 @@ export async function action({ request }: ActionFunctionArgs) {
       const session = await getSession(request.headers.get("Cookie"));
       session.flash(
         SUCCESS_MESSAGE_KEY,
-        `${deletedTodo.title}を削除しました。`
+        `${deletedTodo.title} has been deleted.`
       );
 
       return redirect(url.pathname, {

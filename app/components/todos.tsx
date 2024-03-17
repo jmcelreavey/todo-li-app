@@ -1,9 +1,9 @@
 import { Badge } from "@mantine/core";
 
 const statusOptions = {
-  incomplete: { color: "red", label: "未了" },
-  inprogress: { color: "yellow", label: "着手" },
-  complete: { color: "green", label: "完了" },
+  incomplete: { color: "red", label: "Incomplete" },
+  inprogress: { color: "yellow", label: "In Progress" },
+  complete: { color: "green", label: "Complete" },
 };
 
 interface TodoProgressBadgeProps {

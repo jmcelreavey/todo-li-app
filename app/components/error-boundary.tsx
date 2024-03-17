@@ -6,11 +6,11 @@ export function CommonErrorBoundary() {
     <Alert
       variant="light"
       color="red"
-      title="エラーが発生しました。"
+      title="An error has occurred."
       icon={<ErrorIcon />}
       m="xl"
     >
-      お手数ですがページをリロードをお願いします。
+      Sorry for the inconvenience, please reload the page.
     </Alert>
   );
 }

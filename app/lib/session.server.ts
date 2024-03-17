@@ -8,7 +8,7 @@ export const sessionStorage = createCookieSessionStorage({
     sameSite: "lax",
     path: "/",
     httpOnly: true,
-    secrets: ["s3cr3t"], // 本来は環境変数などで指定するが、サンプルアプリなので固定値を許容
+    secrets: ["s3cr3t"], // Normally specified using environment variables, but using a fixed value for this sample app
     secure: process.env.NODE_ENV === "production",
   },
 });

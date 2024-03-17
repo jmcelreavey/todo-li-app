@@ -1,10 +1,3 @@
-import { useEffect } from "react";
-import {
-  type ActionFunctionArgs,
-  json,
-  LoaderFunctionArgs,
-} from "@remix-run/node";
-import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
 import {
   Anchor,
   Button,
@@ -14,10 +7,17 @@ import {
   TextInput,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import {
+  LoaderFunctionArgs,
+  json,
+  type ActionFunctionArgs,
+} from "@remix-run/node";
+import { Form, NavLink, useActionData, useNavigation } from "@remix-run/react";
+import { useEffect } from "react";
 
+import { AUTH_STRATEGY_NAME, authenticator } from "../lib/auth.server";
 import { CreateUserSchema, createUser } from "../lib/user.server";
 import { commonActionData } from "../utils";
-import { AUTH_STRATEGY_NAME, authenticator } from "../lib/auth.server";
 
 export default function SignUp() {
   const actionData = useActionData<typeof action>();
@@ -38,7 +38,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Text ta="center">新規ユーザー登録</Text>
+      <Text ta="center">Sign Up</Text>
       <Form method="post">
         <Stack
           renderRoot={(props) => (
@@ -48,27 +48,27 @@ export default function SignUp() {
         >
           <TextInput
             name="name"
-            label="ユーザー名"
-            placeholder="半角英数4~20文字で入力してください。"
+            label="Username"
+            placeholder="Enter a username with 4 to 20 alphanumeric characters."
             withAsterisk
             error={validationErrors?.name && validationErrors.name[0]}
           />
           <TextInput
             name="password"
             type="password"
-            label="パスワード"
-            placeholder="半角英数記号8~20文字で入力してください。"
+            label="Password"
+            placeholder="Enter a password with 8 to 20 alphanumeric characters and symbols."
             withAsterisk
             error={validationErrors?.password && validationErrors.password[0]}
           />
           <Button type="submit" fullWidth>
-            登録
+            Sign Up
           </Button>
           <Anchor
             ta="center"
             renderRoot={(props) => <NavLink to="/auth/sign-in" {...props} />}
           >
-            ログインはこちら
+            Already have an account? Sign In here.
           </Anchor>
         </Stack>
       </Form>

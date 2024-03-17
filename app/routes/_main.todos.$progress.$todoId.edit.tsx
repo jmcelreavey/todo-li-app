@@ -1,18 +1,4 @@
 import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-  useParams,
-} from "@remix-run/react";
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  json,
-  redirect,
-} from "@remix-run/node";
-import {
   Button,
   Fieldset,
   Modal,
@@ -20,16 +6,30 @@ import {
   Stack,
   TextInput,
 } from "@mantine/core";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+  useParams,
+} from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { ERROR_MESSAGES } from "../utils";
 import { authenticator } from "../lib/auth.server";
-import { UpdateTodoSchema, getTodo, updateTodo } from "../lib/todo.server";
 import {
   SUCCESS_MESSAGE_KEY,
   commitSession,
   getSession,
 } from "../lib/session.server";
+import { UpdateTodoSchema, getTodo, updateTodo } from "../lib/todo.server";
+import { ERROR_MESSAGES } from "../utils";
 
 export default function TodosEdit() {
   const { progress } = useParams();
@@ -47,7 +47,7 @@ export default function TodosEdit() {
     <Modal
       opened
       onClose={() => navigate(`/todos/${progress}`, { replace: true })}
-      title="編集"
+      title="Edit"
     >
       <Form method="post" replace>
         <Stack
@@ -62,26 +62,26 @@ export default function TodosEdit() {
         >
           <TextInput
             name="title"
-            label="タイトル"
+            label="Title"
             withAsterisk
-            placeholder="タイトルを20文字以内で入力してください。"
+            placeholder="Enter a title within 20 characters."
             defaultValue={todo.title}
             error={validationErrors?.title && validationErrors.title[0]}
           />
           <Select
             name="progress"
-            label="進捗"
+            label="Progress"
             withAsterisk
-            placeholder="進捗を選択してください。"
+            placeholder="Select a progress."
             data={[
-              { value: "incomplete", label: "未了" },
-              { value: "inprogress", label: "着手" },
-              { value: "complete", label: "完了" },
+              { value: "incomplete", label: "Incomplete" },
+              { value: "inprogress", label: "In Progress" },
+              { value: "complete", label: "Complete" },
             ]}
             defaultValue={todo.progress}
           />
           <Button type="submit" ml="auto">
-            編集
+            Edit
           </Button>
         </Stack>
       </Form>
@@ -121,7 +121,10 @@ export async function action({ params, request }: ActionFunctionArgs) {
   });
 
   const session = await getSession(request.headers.get("Cookie"));
-  session.flash(SUCCESS_MESSAGE_KEY, `${updatedTodo.title}を編集しました。`);
+  session.flash(
+    SUCCESS_MESSAGE_KEY,
+    `Successfully edited ${updatedTodo.title}.`
+  );
 
   return redirect(`/todos/${updatedTodo.progress}`, {
     headers: {

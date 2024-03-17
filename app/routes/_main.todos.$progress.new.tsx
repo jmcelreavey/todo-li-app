@@ -1,3 +1,10 @@
+import { Button, Fieldset, Modal, Stack, TextInput } from "@mantine/core";
+import {
+  ActionFunctionArgs,
+  json,
+  redirect,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Form,
   useActionData,
@@ -5,23 +12,16 @@ import {
   useNavigation,
   useParams,
 } from "@remix-run/react";
-import { Button, Fieldset, Modal, Stack, TextInput } from "@mantine/core";
-import {
-  ActionFunctionArgs,
-  redirect,
-  type LoaderFunctionArgs,
-  json,
-} from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 import { authenticator } from "../lib/auth.server";
-import { CreateTodoSchema, createTodo } from "../lib/todo.server";
-import { ERROR_MESSAGES } from "../utils";
 import {
   SUCCESS_MESSAGE_KEY,
   commitSession,
   getSession,
 } from "../lib/session.server";
+import { CreateTodoSchema, createTodo } from "../lib/todo.server";
+import { ERROR_MESSAGES } from "../utils";
 
 export default function TodosNew() {
   const { progress } = useParams();
@@ -37,7 +37,7 @@ export default function TodosNew() {
     <Modal
       opened
       onClose={() => navigate(`/todos/${progress}`, { replace: true })}
-      title="作成"
+      title="Create"
     >
       <Form method="post" replace>
         <Stack
@@ -48,13 +48,13 @@ export default function TodosNew() {
         >
           <TextInput
             name="title"
-            label="タイトル"
+            label="Title"
             withAsterisk
-            placeholder="タイトルを20文字以内で入力してください。"
+            placeholder="Enter a title within 20 characters."
             error={validationErrors?.title && validationErrors.title[0]}
           />
           <Button type="submit" ml="auto">
-            作成
+            Create
           </Button>
         </Stack>
       </Form>
@@ -90,7 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   const session = await getSession(request.headers.get("Cookie"));
-  session.flash(SUCCESS_MESSAGE_KEY, `${newTodo.title}を作成しました。`);
+  session.flash(SUCCESS_MESSAGE_KEY, `Created ${newTodo.title}.`);
 
   return redirect("/todos/incomplete", {
     headers: {

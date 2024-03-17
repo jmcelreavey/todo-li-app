@@ -1,10 +1,9 @@
+import bcrypt from "bcrypt";
 import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
-import bcrypt from "bcrypt";
 import { z } from "zod";
-
-import { sessionStorage } from "./session.server";
 import { prisma } from "./db.server";
+import { sessionStorage } from "./session.server";
 
 export const AUTH_STRATEGY_NAME = "user-path";
 
@@ -30,15 +29,17 @@ authenticator.use(
 export const AuthSchema = z.object({
   name: z
     .string()
-    .min(4, { message: "4文字以上で入力してください。" })
-    .max(20, { message: "20文字以下で入力してください。" })
-    .regex(/^[a-zA-Z0-9]+$/, { message: "半角英数で入力してください。" }),
+    .min(4, { message: "Please enter at least 4 characters." })
+    .max(20, { message: "Please enter at most 20 characters." })
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: "Please enter alphanumeric characters.",
+    }),
   password: z
     .string()
-    .min(8, { message: "8文字以上で入力してください。" })
-    .max(20, { message: "20文字以下で入力してください。" })
+    .min(8, { message: "Please enter at least 8 characters." })
+    .max(20, { message: "Please enter at most 20 characters." })
     .regex(/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]*$/, {
-      message: "半角英数記号で入力してください。",
+      message: "Please enter alphanumeric and symbol characters.",
     }),
 });
 
@@ -51,7 +52,7 @@ async function login({ name, password }: z.infer<typeof AuthSchema>) {
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw Error(
-      "ログインに失敗しました。アカウント名とパスワードを再度ご確認ください。"
+      "Login failed. Please check your account name and password again."
     );
   }
 
