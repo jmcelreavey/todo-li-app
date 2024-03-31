@@ -8,19 +8,54 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String @unique
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
   password String
-  todos    Todo[]
+  email    String    @unique
+  role     String
+  routes   Route[]
+  receipts Receipt[]
 }
 
-model Todo {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  progress  String
-  bookmark  Boolean  @default(false)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+model Customer {
+  id           Int           @id @default(autoincrement())
+  name         String
+  address      String
+  phoneNumber  String
+  email        String
+  price        Float
+  notes        String?
+  appointments Appointment[]
+  receipts     Receipt[]
+}
+
+model Receipt {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
+  amount      Float
+  description String?
+  customerId  Int
+  userId      Int
+  customer    Customer @relation(fields: [customerId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Route {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  appointments Appointment[]
+}
+
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @default(now())
+  status     String
+  customerId Int
+  routeId    Int
+  serviceId  Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  route      Route    @relation(fields: [routeId], references: [id])
 }
